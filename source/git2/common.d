@@ -1,5 +1,7 @@
 module git2.common;
 
+import git2.util;
+
 extern (C):
 
 version(Windows)
@@ -23,6 +25,7 @@ enum git_cap_t
 	GIT_CAP_THREADS			= ( 1 << 0 ),
 	GIT_CAP_HTTPS			= ( 1 << 1 )
 }
+mixin _ExportEnumMembers!git_cap_t;
 
 int git_libgit2_capabilities();
 
@@ -39,5 +42,6 @@ enum git_libgit2_opt_t
 	GIT_OPT_ENABLE_CACHING,
 	GIT_OPT_GET_CACHED_MEMORY
 }
+mixin _ExportEnumMembers!git_libgit2_opt_t;
 
 int git_libgit2_opts(int option, ...);
