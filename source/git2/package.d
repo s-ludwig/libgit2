@@ -1,4 +1,4 @@
-module git.c;
+module git2;
 
 public
 {
