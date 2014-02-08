@@ -1,10 +1,12 @@
-module git.c;
+module git2;
 
 public
 {
     import git2.attr;
+    import git2.blame;
     import git2.blob;
     import git2.branch;
+    import git2.buffer;
     import git2.checkout;
     import git2.clone;
     import git2.commit;
@@ -13,6 +15,7 @@ public
     import git2.cred_helpers;
     import git2.diff;
     import git2.errors;
+    import git2.filter;
     import git2.graph;
     import git2.ignore;
     import git2.index;
@@ -26,6 +29,8 @@ public
     import git2.odb_backend;
     import git2.oid;
     import git2.pack;
+    import git2.patch;
+    import git2.pathspec;
     import git2.push;
     import git2.refdb;
     import git2.reflog;
@@ -50,9 +55,11 @@ public
     import git2.version_;
     import git2.sys.commit;
     import git2.sys.config;
+    import git2.sys.filter;
     import git2.sys.index;
     import git2.sys.odb_backend;
     import git2.sys.refdb_backend;
+    import git2.sys.reflog;
     import git2.sys.refs;
     import git2.sys.repository;
 }

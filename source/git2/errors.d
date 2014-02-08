@@ -1,6 +1,7 @@
 module git2.errors;
 
 import git2.common;
+import git2.buffer;
 import git2.util;
 
 extern (C):
@@ -14,11 +15,12 @@ enum git_error_code {
 	GIT_EBUFS = -6,
 	GIT_EUSER = -7,
 	GIT_EBAREREPO = -8,
-	GIT_EORPHANEDHEAD = -9,
+	GIT_EUNBORNBRANCH = -9,
 	GIT_EUNMERGED = -10,
 	GIT_ENONFASTFORWARD = -11,
 	GIT_EINVALIDSPEC = -12,
 	GIT_EMERGECONFLICT = -13,
+	GIT_ELOCKED = -14,
 
 	GIT_PASSTHROUGH = -30,
 	GIT_ITEROVER = -31,
@@ -31,6 +33,7 @@ struct git_error {
 }
 
 enum git_error_t {
+	GITERR_NONE = 0,
 	GITERR_NOMEMORY,
 	GITERR_OS,
 	GITERR_INVALID,
@@ -53,11 +56,13 @@ enum git_error_t {
 	GITERR_CHECKOUT,
 	GITERR_FETCHHEAD,
 	GITERR_MERGE,
+	GITERR_SSH,
+	GITERR_FILTER,
 }
 mixin _ExportEnumMembers!git_error_t;
 
 const(git_error)*  giterr_last();
-
 void giterr_clear();
+int giterr_detach(git_error *cpy);
 void giterr_set_str(int error_class, const(char)* string);
 void giterr_set_oom();

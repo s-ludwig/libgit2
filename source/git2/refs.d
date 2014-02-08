@@ -69,12 +69,13 @@ int git_reference_foreach_glob(
 int git_reference_has_log(git_reference *ref_);
 int git_reference_is_branch(git_reference *ref_);
 int git_reference_is_remote(git_reference *ref_);
+int git_reference_is_tag(git_reference *ref_);
 
 enum git_reference_normalize_t {
-	GIT_REF_FORMAT_NORMAL = 0,
-	GIT_REF_FORMAT_ALLOW_ONELEVEL = (1 << 0),
-	GIT_REF_FORMAT_REFSPEC_PATTERN = (1 << 1),
-	GIT_REF_FORMAT_REFSPEC_SHORTHAND = (1 << 2),
+	GIT_REF_FORMAT_NORMAL = 0u,
+	GIT_REF_FORMAT_ALLOW_ONELEVEL = (1u << 0),
+	GIT_REF_FORMAT_REFSPEC_PATTERN = (1u << 1),
+	GIT_REF_FORMAT_REFSPEC_SHORTHAND = (1u << 2),
 }
 mixin _ExportEnumMembers!git_reference_normalize_t;
 

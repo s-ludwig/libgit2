@@ -19,7 +19,7 @@ struct git_odb_backend {
 	int function(
 		size_t *, git_otype *, git_odb_backend *, const(git_oid)* ) read_header;
 	int function(
-		git_oid *, git_odb_backend *, const(void)* , size_t, git_otype) write;
+		git_odb_backend *, const git_oid *, const void *, size_t, git_otype) write;
 	int function(
 		git_odb_stream **, git_odb_backend *, size_t, git_otype) writestream;
 	int function(
@@ -30,7 +30,7 @@ struct git_odb_backend {
 	int function(
 		git_odb_backend *, git_odb_foreach_cb cb, void *payload) foreach_;
 	int function(
-		git_odb_writepack **, git_odb_backend *,
+		git_odb_writepack **, git_odb_backend *, git_odb *odb,
 		git_transfer_progress_callback progress_cb, void *progress_payload) writepack;
 	void function(git_odb_backend *) free;
 }

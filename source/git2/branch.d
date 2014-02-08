@@ -14,16 +14,14 @@ int git_branch_create(
 	int force);
 int git_branch_delete(git_reference *branch);
 
-alias git_branch_foreach_cb = int function(
-	const(char)* branch_name,
-	git_branch_t branch_type,
-	void *payload);
+struct git_branch_iterator {
+	@disable this();
+	@disable this(this);
+}
 
-int git_branch_foreach(
-	git_repository *repo,
-	uint list_flags,
-	git_branch_foreach_cb branch_cb,
-	void *payload);
+int git_branch_iterator_new(git_branch_iterator **out_, git_repository *repo, git_branch_t list_flags);
+int git_branch_next(git_reference **out_, git_branch_t *out_type, git_branch_iterator *iter);
+void git_branch_iterator_free(git_branch_iterator *iter);
 int git_branch_move(
 	git_reference **out_,
 	git_reference *branch,

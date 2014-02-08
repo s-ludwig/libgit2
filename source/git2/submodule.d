@@ -7,30 +7,6 @@ import git2.types;
 
 extern (C):
 
-struct git_submodule
-{
-    @disable this();
-    @disable this(this);
-}
-
-enum git_submodule_update_t {
-	GIT_SUBMODULE_UPDATE_DEFAULT = -1,
-	GIT_SUBMODULE_UPDATE_CHECKOUT = 0,
-	GIT_SUBMODULE_UPDATE_REBASE = 1,
-	GIT_SUBMODULE_UPDATE_MERGE = 2,
-	GIT_SUBMODULE_UPDATE_NONE = 3
-}
-mixin _ExportEnumMembers!git_submodule_update_t;
-
-enum git_submodule_ignore_t {
-	GIT_SUBMODULE_IGNORE_DEFAULT = -1,
-	GIT_SUBMODULE_IGNORE_NONE = 0,
-	GIT_SUBMODULE_IGNORE_UNTRACKED = 1,
-	GIT_SUBMODULE_IGNORE_DIRTY = 2,
-	GIT_SUBMODULE_IGNORE_ALL = 3
-}
-mixin _ExportEnumMembers!git_submodule_ignore_t;
-
 enum git_submodule_status_t {
 	GIT_SUBMODULE_STATUS_IN_HEAD           = (1u << 0),
 	GIT_SUBMODULE_STATUS_IN_INDEX          = (1u << 1),
@@ -49,19 +25,9 @@ enum git_submodule_status_t {
 }
 mixin _ExportEnumMembers!git_submodule_status_t;
 
-enum GIT_SUBMODULE_STATUS__IN_FLAGS =
-	(git_submodule_status_t.GIT_SUBMODULE_STATUS_IN_HEAD |
-	git_submodule_status_t.GIT_SUBMODULE_STATUS_IN_INDEX |
-	git_submodule_status_t.GIT_SUBMODULE_STATUS_IN_CONFIG |
-	git_submodule_status_t.GIT_SUBMODULE_STATUS_IN_WD);
-
-enum GIT_SUBMODULE_STATUS__INDEX_FLAGS =
-	(git_submodule_status_t.GIT_SUBMODULE_STATUS_INDEX_ADDED |
-	git_submodule_status_t.GIT_SUBMODULE_STATUS_INDEX_DELETED |
-	git_submodule_status_t.GIT_SUBMODULE_STATUS_INDEX_MODIFIED);
-
-enum GIT_SUBMODULE_STATUS__WD_FLAGS =
-	~(GIT_SUBMODULE_STATUS__IN_FLAGS | GIT_SUBMODULE_STATUS__INDEX_FLAGS);
+enum GIT_SUBMODULE_STATUS__IN_FLAGS = 0x000Fu;
+enum GIT_SUBMODULE_STATUS__INDEX_FLAGS = 0x0070u;
+enum GIT_SUBMODULE_STATUS__WD_FLAGS = 0x3F80u;
 
 auto GIT_SUBMODULE_STATUS_IS_UNMODIFIED(T)(T S)
 {

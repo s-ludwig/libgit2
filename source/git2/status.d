@@ -34,7 +34,6 @@ enum git_status_show_t {
 	GIT_STATUS_SHOW_INDEX_AND_WORKDIR = 0,
 	GIT_STATUS_SHOW_INDEX_ONLY = 1,
 	GIT_STATUS_SHOW_WORKDIR_ONLY = 2,
-	GIT_STATUS_SHOW_INDEX_THEN_WORKDIR = 3,
 }
 mixin _ExportEnumMembers!git_status_show_t;
 
@@ -50,6 +49,8 @@ enum git_status_opt_t {
 	GIT_STATUS_OPT_RENAMES_INDEX_TO_WORKDIR = (1u << 8),
 	GIT_STATUS_OPT_SORT_CASE_SENSITIVELY    = (1u << 9),
 	GIT_STATUS_OPT_SORT_CASE_INSENSITIVELY  = (1u << 10),
+	GIT_STATUS_OPT_RENAMES_FROM_REWRITES    = (1u << 11),
+	GIT_STATUS_OPT_NO_REFRESH               = (1u << 12),
 }
 mixin _ExportEnumMembers!git_status_opt_t;
 

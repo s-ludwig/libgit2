@@ -21,6 +21,7 @@ int git_repository_discover(
 enum git_repository_open_flag_t {
 	GIT_REPOSITORY_OPEN_NO_SEARCH = (1 << 0),
 	GIT_REPOSITORY_OPEN_CROSS_FS  = (1 << 1),
+	GIT_REPOSITORY_OPEN_BARE      = (1 << 2),
 }
 mixin _ExportEnumMembers!git_repository_open_flag_t;
 
@@ -73,7 +74,7 @@ int git_repository_init_ext(
 	git_repository_init_options *opts);
 int git_repository_head(git_reference **out_, git_repository *repo);
 int git_repository_head_detached(git_repository *repo);
-int git_repository_head_orphan(git_repository *repo);
+int git_repository_head_unborn(git_repository *repo);
 int git_repository_is_empty(git_repository *repo);
 const(char)*  git_repository_path(git_repository *repo);
 const(char)*  git_repository_workdir(git_repository *repo);

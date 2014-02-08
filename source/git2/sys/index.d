@@ -18,13 +18,10 @@ struct git_index_reuc_entry {
 }
 
 uint git_index_name_entrycount(git_index *index);
-
 const(git_index_name_entry)*  git_index_name_get_byindex(
 	git_index *index, size_t n);
-
 int git_index_name_add(git_index *index,
 	const(char)* ancestor, const(char)* ours, const(char)* theirs);
-
 void git_index_name_clear(git_index *index);
 uint git_index_reuc_entrycount(git_index *index);
 int git_index_reuc_find(size_t *at_pos, git_index *index, const(char)* path);

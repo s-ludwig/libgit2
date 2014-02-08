@@ -60,9 +60,9 @@ enum GIT_IDXENTRY_UNPACKED          = (1 << 8);
 enum GIT_IDXENTRY_NEW_SKIP_WORKTREE = (1 << 9);
 
 enum git_indexcap_t {
-	GIT_INDEXCAP_IGNORE_CASE = 1,
-	GIT_INDEXCAP_NO_FILEMODE = 2,
-	GIT_INDEXCAP_NO_SYMLINKS = 4,
+	GIT_INDEXCAP_IGNORE_CASE = 1u,
+	GIT_INDEXCAP_NO_FILEMODE = 2u,
+	GIT_INDEXCAP_NO_SYMLINKS = 4u,
 	GIT_INDEXCAP_FROM_OWNER  = ~0u
 }
 mixin _ExportEnumMembers!git_indexcap_t;
@@ -78,14 +78,17 @@ enum git_index_add_option_t {
 }
 mixin _ExportEnumMembers!git_index_add_option_t;
 
+enum GIT_INDEX_STAGE_ANY = -1;
+
 int git_index_open(git_index **out_, const(char)* index_path);
 int git_index_new(git_index **out_);
 void git_index_free(git_index *index);
 git_repository * git_index_owner(const(git_index)* index);
 uint git_index_caps(const(git_index)* index);
 int git_index_set_caps(git_index *index, uint caps);
-int git_index_read(git_index *index);
+int git_index_read(git_index *index, int force);
 int git_index_write(git_index *index);
+const(char)* git_index_path(git_index *index);
 int git_index_read_tree(git_index *index, const(git_tree)* tree);
 int git_index_write_tree(git_oid *out_, git_index *index);
 int git_index_write_tree_to(git_oid *out_, git_index *index, git_repository *repo);

@@ -22,6 +22,10 @@ int git_odb_refresh(git_odb *db);
 int git_odb_foreach(git_odb *db, git_odb_foreach_cb cb, void *payload);
 int git_odb_write(git_oid *out_, git_odb *odb, const(void)* data, size_t len, git_otype type);
 int git_odb_open_wstream(git_odb_stream **out_, git_odb *db, size_t size, git_otype type);
+int git_odb_stream_write(git_odb_stream *stream, const(char)* buffer, size_t len);
+int git_odb_stream_finalize_write(git_oid *out_, git_odb_stream *stream);
+int git_odb_stream_read(git_odb_stream *stream, char *buffer, size_t len);
+void git_odb_stream_free(git_odb_stream *stream);
 int git_odb_open_rstream(git_odb_stream **out_, git_odb *db, const(git_oid)* oid);
 int git_odb_write_pack(
 	git_odb_writepack **out_,
@@ -30,6 +34,7 @@ int git_odb_write_pack(
 	void *progress_payload);
 int git_odb_hash(git_oid *out_, const(void)* data, size_t len, git_otype type);
 int git_odb_hashfile(git_oid *out_, const(char)* path, git_otype type);
+int git_odb_object_dup(git_odb_object **dest, git_odb_object *source);
 void git_odb_object_free(git_odb_object *object);
 const(git_oid)*  git_odb_object_id(git_odb_object *object);
 const(void)*  git_odb_object_data(git_odb_object *object);

@@ -35,6 +35,23 @@ struct git_merge_tree_opts {
 enum GIT_MERGE_TREE_OPTS_VERSION = 1;
 enum git_merge_tree_opts GIT_MERGE_TREE_OPTS_INIT = { GIT_MERGE_TREE_OPTS_VERSION };
 
+enum git_merge_flags_t {
+	GIT_MERGE_NO_FASTFORWARD      = 1,
+	GIT_MERGE_FASTFORWARD_ONLY    = 2,
+}
+
+struct git_merge_opts {
+	uint version_ = GIT_MERGE_OPTS_VERSION;
+
+	git_merge_flags_t merge_flags;
+	git_merge_tree_opts merge_tree_opts;
+
+	git_checkout_opts checkout_opts;
+}
+
+enum GIT_MERGE_OPTS_VERSION = 1;
+enum git_merge_opts GIT_MERGE_OPTS_INIT = {GIT_MERGE_OPTS_VERSION, cast(git_merge_flags_t)0, GIT_MERGE_TREE_OPTS_INIT, GIT_CHECKOUT_OPTS_INIT};
+
 int git_merge_base(
 	git_oid *out_,
 	git_repository *repo,
@@ -43,8 +60,8 @@ int git_merge_base(
 int git_merge_base_many(
 	git_oid *out_,
 	git_repository *repo,
-	const(git_oid)* input_array,
-	size_t length);
+	size_t length,
+	const(git_oid)* input_array);
 int git_merge_head_from_ref(
 	git_merge_head **out_,
 	git_repository *repo,
@@ -68,3 +85,13 @@ int git_merge_trees(
 	const(git_tree)* our_tree,
 	const(git_tree)* their_tree,
 	const(git_merge_tree_opts)* opts);
+int git_merge(
+	git_merge_result **out_,
+	git_repository *repo,
+	const(git_merge_head)* *their_heads,
+	size_t their_heads_len,
+	const(git_merge_opts)* opts);
+int git_merge_result_is_uptodate(git_merge_result *merge_result);
+int git_merge_result_is_fastforward(git_merge_result *merge_result);
+int git_merge_result_fastforward_oid(git_oid *out_, git_merge_result *merge_result);
+void git_merge_result_free(git_merge_result *merge_result);

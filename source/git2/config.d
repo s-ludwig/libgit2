@@ -3,6 +3,7 @@ module git2.config;
 import git2.common;
 import git2.types;
 import git2.util;
+import git2.sys.config;
 
 extern (C):
 
@@ -23,6 +24,10 @@ struct git_config_entry {
 }
 
 alias git_config_foreach_cb = int function(const(git_config_entry)*, void *);
+struct git_config_iterator {
+	@disable this();
+	@disable this(this);
+}
 
 enum git_cvar_t {
 	GIT_CVAR_FALSE = 0,
@@ -64,17 +69,23 @@ int git_config_get_int32(int32_t *out_, const(git_config)* cfg, const(char)* nam
 int git_config_get_int64(int64_t *out_, const(git_config)* cfg, const(char)* name);
 int git_config_get_bool(int *out_, const(git_config)* cfg, const(char)* name);
 int git_config_get_string(const(char)** out_, const(git_config)* cfg, const(char)* name);
-int git_config_get_multivar(const(git_config)* cfg, const(char)* name, const(char)* regexp, git_config_foreach_cb callback, void *payload);
+int git_config_get_multivar_foreach(const(git_config)* cfg, const(char)* name, const(char)* regexp, git_config_foreach_cb callback, void *payload);
+int git_config_multivar_iterator_new(git_config_iterator** out_, const(git_config)* cfg, const(char)* name, const(char)* regexp);
+int git_config_next(git_config_entry** entry, git_config_iterator *iter);
+void git_config_iterator_free(git_config_iterator *iter);
 int git_config_set_int32(git_config *cfg, const(char)* name, int32_t value);
 int git_config_set_int64(git_config *cfg, const(char)* name, int64_t value);
 int git_config_set_bool(git_config *cfg, const(char)* name, int value);
 int git_config_set_string(git_config *cfg, const(char)* name, const(char)* value);
 int git_config_set_multivar(git_config *cfg, const(char)* name, const(char)* regexp, const(char)* value);
 int git_config_delete_entry(git_config *cfg, const(char)* name);
+int git_config_delete_multivar(git_config *cfg, const(char)* name, const(char)* regexp);
 int git_config_foreach(
 	const(git_config)* cfg,
 	git_config_foreach_cb callback,
 	void *payload);
+int git_config_iterator_new(git_config_iterator** out_, const(git_config)* cfg);
+int git_config_iterator_glob_new(git_config_iterator** out_, const(git_config)* cfg, const(char)* regexp);
 int git_config_foreach_match(
 	const(git_config)* cfg,
 	const(char)* regexp,
@@ -94,3 +105,8 @@ int git_config_lookup_map_value(
 int git_config_parse_bool(int *out_, const(char)* value);
 int git_config_parse_int32(int32_t *out_, const(char)* value);
 int git_config_parse_int64(int64_t *out_, const(char)* value);
+int git_config_backend_foreach_match(
+	git_config_backend *backend,
+	const(char)* regexp,
+	int function(const(git_config_entry)*, void*) fn,
+	void *data);

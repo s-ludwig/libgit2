@@ -4,6 +4,7 @@ import git2.common;
 import git2.object_;
 import git2.oid;
 import git2.types;
+import git2.buffer;
 
 extern (C):
 
@@ -14,6 +15,7 @@ const(git_oid)* git_blob_id(const(git_blob)* blob);
 git_repository * git_blob_owner(const(git_blob)* blob);
 const(void)*  git_blob_rawcontent(const(git_blob)* blob);
 git_off_t git_blob_rawsize(const(git_blob)* blob);
+int git_blob_filtered_content(git_buf *out_, git_blob *blob, const(char)* as_path, int check_for_binary_data);
 int git_blob_create_fromworkdir(git_oid *id, git_repository *repo, const(char)* relative_path);
 int git_blob_create_fromdisk(git_oid *id, git_repository *repo, const(char)* path);
 

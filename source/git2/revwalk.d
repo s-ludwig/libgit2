@@ -24,5 +24,6 @@ int git_revwalk_hide_ref(git_revwalk *walk, const(char)* refname);
 int git_revwalk_next(git_oid *out_, git_revwalk *walk);
 void git_revwalk_sorting(git_revwalk *walk, uint sort_mode);
 int git_revwalk_push_range(git_revwalk *walk, const(char)* range);
+void git_revwalk_simplify_first_parent(git_revwalk *walk);
 void git_revwalk_free(git_revwalk *walk);
 git_repository * git_revwalk_repository(git_revwalk *walk);

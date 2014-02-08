@@ -174,6 +174,12 @@ struct git_merge_head
     @disable this(this);
 }
 
+struct git_merge_result
+{
+    @disable this();
+    @disable this(this);
+}
+
 struct git_status_list
 {
     @disable this();
@@ -230,7 +236,38 @@ struct git_transfer_progress
 	uint total_objects;
 	uint indexed_objects;
 	uint received_objects;
+    uint local_objects;
+    uint total_deltas;
+    uint indexed_deltas;
 	size_t received_bytes;
 }
 
 alias git_transfer_progress_callback = int function(const(git_transfer_progress)* stats, void* payload);
+
+struct git_submodule
+{
+    @disable this();
+    @disable this(this);
+}
+
+enum git_submodule_update_t {
+    GIT_SUBMODULE_UPDATE_RESET    = -1,
+
+    GIT_SUBMODULE_UPDATE_CHECKOUT = 1,
+    GIT_SUBMODULE_UPDATE_REBASE   = 2,
+    GIT_SUBMODULE_UPDATE_MERGE    = 3,
+    GIT_SUBMODULE_UPDATE_NONE     = 4,
+
+    GIT_SUBMODULE_UPDATE_DEFAULT  = 0
+}
+
+enum git_submodule_ignore_t {
+    GIT_SUBMODULE_IGNORE_RESET     = -1,
+
+    GIT_SUBMODULE_IGNORE_NONE      = 1,
+    GIT_SUBMODULE_IGNORE_UNTRACKED = 2,
+    GIT_SUBMODULE_IGNORE_DIRTY     = 3,
+    GIT_SUBMODULE_IGNORE_ALL       = 4,
+
+    GIT_SUBMODULE_IGNORE_DEFAULT   = 0
+}

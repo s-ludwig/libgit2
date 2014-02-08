@@ -17,6 +17,11 @@ int git_object_lookup_prefix(
 		const(git_oid)* id,
 		size_t len,
 		git_otype type);
+int git_object_lookup_bypath(
+		git_object **out_,
+		const git_object *treeish,
+		const(char)* path,
+		git_otype type);
 const(git_oid)* git_object_id(const(git_object)* obj);
 git_otype git_object_type(const(git_object)* obj);
 git_repository * git_object_owner(const(git_object)* obj);

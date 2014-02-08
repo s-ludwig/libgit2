@@ -35,6 +35,7 @@ const(char)*  git_tree_entry_name(const(git_tree_entry)* entry);
 const(git_oid)*  git_tree_entry_id(const(git_tree_entry)* entry);
 git_otype git_tree_entry_type(const(git_tree_entry)* entry);
 git_filemode_t git_tree_entry_filemode(const(git_tree_entry)* entry);
+git_filemode_t git_tree_entry_filemode_raw(const(git_tree_entry)* entry);
 int git_tree_entry_cmp(const(git_tree_entry)* e1, const(git_tree_entry)* e2);
 int git_tree_entry_to_object(
 	git_object **object_out,

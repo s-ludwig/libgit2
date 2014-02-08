@@ -14,67 +14,71 @@ version (GIT_SSH)
 }
 
 enum git_credtype_t {
-	GIT_CREDTYPE_USERPASS_PLAINTEXT = 1,
-	GIT_CREDTYPE_SSH_KEYFILE_PASSPHRASE = 2,
-	GIT_CREDTYPE_SSH_PUBLICKEY = 3,
+	GIT_CREDTYPE_USERPASS_PLAINTEXT = (1u << 0),
+	GIT_CREDTYPE_SSH_KEY = (1u << 1),
+	GIT_CREDTYPE_SSH_CUSTOM = (1u << 2),
+	GIT_CREDTYPE_DEFAULT = (1u << 3),
 }
 mixin _ExportEnumMembers!git_credtype_t;
 
 struct git_cred {
 	git_credtype_t credtype;
 	void function(git_cred *cred) free;
-};
+}
 
 struct git_cred_userpass_plaintext {
 	git_cred parent;
 	char *username;
 	char *password;
-};
-
-version (GIT_SSH)
-{
-    static assert(0, "dlibgit does not support SSH yet.");
-    // typedef LIBSSH2_USERAUTH_PUBLICKEY_SIGN_FUNC((*git_cred_sign_callback));
-
-    struct git_cred_ssh_keyfile_passphrase {
-        git_cred parent;
-        char *publickey;
-        char *privatekey;
-        char *passphrase;
-    };
-
-    struct git_cred_ssh_publickey {
-        git_cred parent;
-        char *publickey;
-        size_t publickey_len;
-        void *sign_callback;
-        void *sign_data;
-    };
 }
+
+version (GIT_SSH) {
+	//typedef LIBSSH2_USERAUTH_PUBLICKEY_SIGN_FUNC((*git_cred_sign_callback));
+    static assert(0, "dlibgit does not support SSH yet.");
+} else {
+	alias git_cred_sign_callback = int function(void *, ...);
+}
+
+struct git_cred_ssh_key {
+	git_cred parent;
+	char *username;
+	char *publickey;
+	char *privatekey;
+	char *passphrase;
+}
+
+struct git_cred_ssh_custom {
+	git_cred parent;
+	char *username;
+	char *publickey;
+	size_t publickey_len;
+	void *sign_callback;
+	void *sign_data;
+}
+
+alias git_cred_default = git_cred;
+
+int git_cred_has_username(git_cred *cred);
 
 int git_cred_userpass_plaintext_new(
 	git_cred **out_,
 	const(char)* username,
 	const(char)* password);
 
-version (GIT_SSH)
-{
-    static assert(0, "dlibgit does not support SSH yet.");
-    // typedef LIBSSH2_USERAUTH_PUBLICKEY_SIGN_FUNC((*git_cred_sign_callback));
-
-	int git_cred_ssh_keyfile_passphrase_new(
-		git_cred **out_,
-		const(char)* publickey,
-		const(char)* privatekey,
-		const(char)* passphrase);
-
-    int git_cred_ssh_publickey_new(
-        git_cred **out_,
-        const(char)* publickey,
-        size_t publickey_len,
-        git_cred_sign_callback,
-        void *sign_data);
-}
+int git_cred_ssh_key_new(
+	git_cred **out_,
+	const(char)* username,
+	const(char)* publickey,
+	const(char)* privatekey,
+	const(char)* passphrase);
+int git_cred_ssh_custom_new(
+	git_cred **out_,
+	const(char)* username,
+	const(char)* publickey,
+	size_t publickey_len,
+	git_cred_sign_callback sign_fn,
+	void *sign_data);
+int git_cred_default_new(git_cred **out_);
 
 alias git_cred_acquire_cb = int function(
 	git_cred **cred,
@@ -89,12 +93,11 @@ enum git_transport_flags_t {
 }
 mixin _ExportEnumMembers!git_transport_flags_t;
 
-alias git_transport_message_cb = void function(const(char)* str, int len, void *data);
+alias git_transport_message_cb = int function(const(char)* str, int len, void *data);
 
 struct git_transport
 {
 	uint version_ = GIT_TRANSPORT_VERSION;
-
 	int function(git_transport *transport,
 		git_transport_message_cb progress_cb,
 		git_transport_message_cb error_cb,
@@ -105,9 +108,10 @@ struct git_transport
 		void *cred_acquire_payload,
 		int direction,
 		int flags) connect;
-	int function(git_transport *transport,
-		git_headlist_cb list_cb,
-		void *payload) ls;
+	int function(
+		const(git_remote_head)*** out_,
+		size_t *size,
+		git_transport *transport) ls;
 	int function(git_transport *transport, git_push *push) push;
 	int function(git_transport *transport,
 		git_repository *repo,
@@ -132,6 +136,14 @@ int git_transport_new(git_transport **out_, git_remote *owner, const(char)* url)
 
 alias git_transport_cb = int function(git_transport **out_, git_remote *owner, void *param);
 
+int git_transport_register(
+	const(char) *prefix,
+	uint priority,
+	git_transport_cb cb,
+	void *param);
+int git_transport_unregister(
+	const(char) *prefix,
+	uint priority);
 int git_transport_dummy(
 	git_transport **out_,
 	git_remote *owner,
@@ -154,18 +166,17 @@ mixin _ExportEnumMembers!git_smart_service_t;
 
 struct git_smart_subtransport_stream {
 	git_smart_subtransport *subtransport;
-
 	int function(
-			git_smart_subtransport_stream *stream,
-			char *buffer,
-			size_t buf_size,
-			size_t *bytes_read) read;
+		git_smart_subtransport_stream *stream,
+		char *buffer,
+		size_t buf_size,
+		size_t *bytes_read) read;
 	int function(
-			git_smart_subtransport_stream *stream,
-			const(char)* buffer,
-			size_t len) write;
+		git_smart_subtransport_stream *stream,
+		const(char)* buffer,
+		size_t len) write;
 	void function(
-			git_smart_subtransport_stream *stream) free;
+		git_smart_subtransport_stream *stream) free;
 }
 
 struct git_smart_subtransport {
