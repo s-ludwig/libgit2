@@ -23,7 +23,7 @@ const(git_tree_entry)*  git_tree_entry_byname(
 	const(git_tree)* tree, const(char)* filename);
 const(git_tree_entry)*  git_tree_entry_byindex(
 	const(git_tree)* tree, size_t idx);
-const(git_tree_entry)*  git_tree_entry_byoid(
+const(git_tree_entry)*  git_tree_entry_byid(
 	const(git_tree)* tree, const(git_oid)* oid);
 int git_tree_entry_bypath(
 	git_tree_entry **out_,
