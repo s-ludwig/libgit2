@@ -179,6 +179,18 @@ struct git_merge_head
     @disable this(this);
 }
 
+struct git_transaction
+{
+    @disable this();
+    @disable this(this);
+}
+
+struct git_annotated_commit
+{
+    @disable this();
+    @disable this(this);
+}
+
 struct git_merge_result
 {
     @disable this();
@@ -240,6 +252,12 @@ struct git_remote
     @disable this(this);
 }
 
+struct git_transport
+{
+    @disable this();
+    @disable this(this);
+}
+
 struct git_push
 {
     @disable this();
@@ -257,7 +275,8 @@ struct git_transfer_progress
 	size_t received_bytes;
 }
 
-alias git_transfer_progress_callback = int function(const(git_transfer_progress)* stats, void* payload);
+alias git_transfer_progress_cb = int function(const(git_transfer_progress) *stats, void *payload);
+alias git_transport_message_cb = int function(const(char) *str, int len, void *payload);
 alias git_transport_certificate_check_cb = int function(git_cert *cert, int valid, const(char) *host, void *payload);
 
 struct git_submodule
@@ -266,6 +285,12 @@ struct git_submodule
     @disable this(this);
 }
 
+struct git_writestream
+{
+    int function(git_writestream *stream, const(char) *buffer, size_t len) write;
+    int function(git_writestream *stream) close;
+    void function(git_writestream *stream) free;
+}
 
 enum git_submodule_update_t {
     GIT_SUBMODULE_UPDATE_CHECKOUT = 1,

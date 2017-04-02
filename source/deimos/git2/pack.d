@@ -20,7 +20,7 @@ int git_packbuilder_write(
 	git_packbuilder *pb,
 	const(char)* path,
 	uint mode,
-	git_transfer_progress_callback progress_cb,
+	git_transfer_progress_cb progress_cb,
 	void *progress_cb_payload);
 const(git_oid)* git_packbuilder_hash(git_packbuilder *pb);
 

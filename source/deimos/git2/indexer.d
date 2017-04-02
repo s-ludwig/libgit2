@@ -17,7 +17,7 @@ int git_indexer_new(
 		const(char)* path,
 		uint mode,
 		git_odb *odb,
-		git_transfer_progress_callback progress_cb,
+		git_transfer_progress_cb progress_cb,
 		void *progress_cb_payload);
 int git_indexer_append(git_indexer *idx, const(void)* data, size_t size, git_transfer_progress *stats);
 int git_indexer_commit(git_indexer *idx, git_transfer_progress *stats);

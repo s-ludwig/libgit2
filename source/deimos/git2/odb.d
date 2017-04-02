@@ -30,7 +30,7 @@ int git_odb_open_rstream(git_odb_stream **out_, git_odb *db, const(git_oid)* oid
 int git_odb_write_pack(
 	git_odb_writepack **out_,
 	git_odb *db,
-	git_transfer_progress_callback progress_cb,
+	git_transfer_progress_cb progress_cb,
 	void *progress_payload);
 int git_odb_hash(git_oid *out_, const(void)* data, size_t len, git_otype type);
 int git_odb_hashfile(git_oid *out_, const(char)* path, git_otype type);
