@@ -62,4 +62,5 @@ public
     import deimos.git2.sys.reflog;
     import deimos.git2.sys.refs;
     import deimos.git2.sys.repository;
+    import deimos.git2.sys.transport;
 }

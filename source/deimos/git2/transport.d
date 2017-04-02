@@ -207,3 +207,23 @@ int git_smart_subtransport_git(
 int git_smart_subtransport_ssh(
 	git_smart_subtransport **out_,
 	git_transport* owner);
+
+enum git_cert_ssh_t {
+    GIT_CERT_SSH_MD5 = (1 << 0),
+    GIT_CERT_SSH_SHA1 = (1 << 1),
+}
+mixin _ExportEnumMembers!git_cert_ssh_t;
+
+struct git_cert_hostkey {
+    git_cert parent;
+    git_cert_ssh_t type;
+
+    ubyte[16] hash_md5;
+    ubyte[20] hash_sha1;
+}
+
+struct git_cert_x509 {
+     git_cert parent;
+     void *data;
+     size_t len;
+}

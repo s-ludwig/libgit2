@@ -162,6 +162,11 @@ struct git_signature
 	git_time when;
 }
 
+struct git_cert
+{
+    git_cert_t cert_type;
+}
+
 struct git_reference
 {
     @disable this();
@@ -185,6 +190,15 @@ struct git_status_list
     @disable this();
     @disable this(this);
 }
+
+enum git_cert_t
+{
+    GIT_CERT_NONE,
+    GIT_CERT_X509,
+    GIT_CERT_HOSTKEY_LIBSSH2,
+    GIT_CERT_STRARRAY,
+}
+mixin _ExportEnumMembers!git_cert_t;
 
 enum git_ref_t
 {
@@ -243,6 +257,7 @@ struct git_transfer_progress
 }
 
 alias git_transfer_progress_callback = int function(const(git_transfer_progress)* stats, void* payload);
+alias git_transport_certificate_check_cb = int function(git_cert *cert, int valid, const(char) *host, void *payload);
 
 struct git_submodule
 {
