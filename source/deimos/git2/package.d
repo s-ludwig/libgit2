@@ -2,6 +2,7 @@ module git2;
 
 public
 {
+    import deimos.git2.annotated_commit;
     import deimos.git2.attr;
     import deimos.git2.blame;
     import deimos.git2.blob;
