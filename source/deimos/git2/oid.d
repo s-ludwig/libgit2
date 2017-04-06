@@ -21,14 +21,11 @@ void git_oid_fromraw(git_oid *out_, const(ubyte)* raw);
 void git_oid_fmt(char *out_, const(git_oid)* id);
 void git_oid_nfmt(char *out_, size_t n, const(git_oid)* id);
 void git_oid_pathfmt(char *out_, const(git_oid)* id);
-char* git_oid_allocfmt(const(git_oid)* id);
+char* git_oid_tostr_s(const(git_oid)* oid);
 char * git_oid_tostr(char *out_, size_t n, const(git_oid)* id);
 void git_oid_cpy(git_oid *out_, const(git_oid)* src);
 int git_oid_cmp(const(git_oid)* a, const(git_oid)* b);
-int git_oid_equal(const(git_oid)* a, const(git_oid)* b)
-{
-	return !git_oid_cmp(a, b);
-}
+int git_oid_equal(const(git_oid)* a, const(git_oid)* b);
 int git_oid_ncmp(const(git_oid)* a, const(git_oid)* b, size_t len);
 int git_oid_streq(const(git_oid)* id, const(char)* str);
 int git_oid_strcmp(const(git_oid)* id, const(char)* str);
