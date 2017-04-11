@@ -19,7 +19,8 @@ struct git_remote_head {
 	int local;
 	git_oid oid;
 	git_oid loid;
-	char *name;
+	char* name;
+	char* symref_target;
 }
 
 alias git_headlist_cb = int function(git_remote_head *rhead, void *payload);
