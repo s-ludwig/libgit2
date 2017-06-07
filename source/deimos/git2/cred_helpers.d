@@ -5,8 +5,8 @@ import deimos.git2.transport;
 extern (C):
 
 struct git_cred_userpass_payload {
-	char *username;
-	char *password;
+	const(char)* username;
+	const(char)* password;
 }
 
 int git_cred_userpass(
