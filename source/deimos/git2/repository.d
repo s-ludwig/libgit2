@@ -3,6 +3,7 @@ module deimos.git2.repository;
 import std.conv;
 
 import deimos.git2.common;
+import deimos.git2.buffer;
 import deimos.git2.oid;
 import deimos.git2.util;
 import deimos.git2.types;
@@ -11,9 +12,7 @@ extern (C):
 
 int git_repository_open(git_repository **out_, const(char)* path);
 int git_repository_wrap_odb(git_repository **out_, git_odb *odb);
-int git_repository_discover(
-		char *path_out,
-		size_t path_size,
+int git_repository_discover(git_buf* buffer,
 		const(char)* start_path,
 		int across_fs,
 		const(char)* ceiling_dirs);
@@ -87,7 +86,7 @@ int git_repository_refdb(git_refdb **out_, git_repository *repo);
 int git_repository_index(git_index **out_, git_repository *repo);
 int git_repository_message(char *out_, size_t len, git_repository *repo);
 int git_repository_message_remove(git_repository *repo);
-int git_repository_merge_cleanup(git_repository *repo);
+int git_repository_state_cleanup(git_repository *repo);
 
 alias git_repository_fetchhead_foreach_cb = int function(const(char)* ref_name,
 	const(char)* remote_url,
