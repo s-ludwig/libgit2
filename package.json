@@ -6,6 +6,5 @@
 	"copyFiles-windows-x86-dmd": ["lib/windows-x86-dmd/git2.dll"],
 	"sourceFiles-windows-x86-dmd": ["lib/windows-x86-dmd/git2.lib"],
 	"libs-posix": ["git2"],
-	"excludedSourceFiles": ["source/git2/package.d"],
-	"version": "0.25.1"
+	"excludedSourceFiles": ["source/git2/package.d"]
 }
