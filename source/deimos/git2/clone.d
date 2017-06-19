@@ -9,24 +9,59 @@ import deimos.git2.types;
 
 extern (C):
 
+
+enum git_clone_local_t {
+    GIT_CLONE_LOCAL_AUTO,
+    GIT_CLONE_LOCAL,
+    GIT_CLONE_NO_LOCAL,
+    GIT_CLONE_LOCAL_NO_LINKS,
+}
+mixin _ExportEnumMembers!git_clone_local_t;
+
+alias git_remote_create_cb = int function(
+    git_remote **out_,
+    git_repository *repo,
+    const(char)* name,
+    const(char)* url,
+    void *payload,
+);
+alias git_repository_create_cb = int function(
+    git_repository **out_,
+    const(char)* path,
+    int bare,
+    void *payload,
+);
+
 struct git_clone_options {
 	uint version_ = GIT_CLONE_OPTIONS_VERSION;
 
-	git_checkout_opts checkout_opts;
-	git_remote_callbacks remote_callbacks;
+	git_checkout_options checkout_opts;
+	git_fetch_options fetch_opts;
 
 	int bare;
-	int ignore_cert_errors;
-	const(char)* remote_name;
+	git_clone_local_t local;
 	const(char)* checkout_branch;
+
+	git_repository_create_cb repository_cb;
+	void *repository_cb_payload;
+	git_remote_create_cb remote_cb;
+	void *remote_cb_payload;
 }
 
 enum GIT_CLONE_OPTIONS_VERSION = 1;
-enum git_clone_options GIT_CLONE_OPTIONS_INIT = { GIT_CLONE_OPTIONS_VERSION };
+enum git_clone_options GIT_CLONE_OPTIONS_INIT = {
+	GIT_CLONE_OPTIONS_VERSION,
+	{ GIT_CHECKOUT_OPTIONS_VERSION, GIT_CHECKOUT_SAFE },
+	GIT_FETCH_OPTIONS_INIT
+};
 
+int git_clone_init_options(
+    git_clone_options *opts,
+    uint version_,
+);
 int git_clone(
-		git_repository **out_,
-		const(char)* url,
-		const(char)* local_path,
-		const(git_clone_options)* options);
-int git_clone_into(git_repository *repo, git_remote *remote, const(git_checkout_opts)* co_opts, const(char)* branch);
+    git_repository **out_,
+    const(char)* url,
+    const(char)* local_path,
+    const(git_clone_options)* options,
+);
