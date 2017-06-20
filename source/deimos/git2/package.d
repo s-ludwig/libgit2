@@ -34,6 +34,7 @@ public
     import deimos.git2.pathspec;
     import deimos.git2.proxy;
     import deimos.git2.push;
+    import deimos.git2.rebase;
     import deimos.git2.refdb;
     import deimos.git2.reflog;
     import deimos.git2.refs;
