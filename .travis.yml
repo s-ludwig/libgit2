@@ -1,0 +1,15 @@
+language: d
+
+install:
+  - LIBGIT2_VER=0.20.0
+  - curl -fsSL https://github.com/libgit2/libgit2/archive/v${LIBGIT2_VER}.tar.gz | tar -xzf -
+  - pushd libgit2-${LIBGIT2_VER}/
+  - cmake -DCMAKE_INSTALL_PREFIX=${HOME}/libgit2 .
+  - make -j2
+  - make install
+  - popd
+  - export LIBRARY_PATH="${HOME}/libgit2/lib:${LIBRARY_PATH}"
+  - export LD_LIBRARY_PATH="${HOME}/libgit2/lib:${LD_LIBRARY_PATH}"
+
+script:
+  - dub test
