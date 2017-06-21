@@ -1,5 +1,6 @@
 module deimos.git2.commit;
 
+import deimos.git2.buffer;
 import deimos.git2.common;
 import deimos.git2.object_;
 import deimos.git2.oid;

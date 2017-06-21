@@ -1,9 +1,12 @@
 module deimos.git2.rebase;
 
 import deimos.git2.annotated_commit;
+import deimos.git2.checkout;
 import deimos.git2.common;
+import deimos.git2.merge;
 import deimos.git2.oid;
 import deimos.git2.types;
+import deimos.git2.util;
 
 
 extern (C):
