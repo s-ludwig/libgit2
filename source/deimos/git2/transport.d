@@ -93,45 +93,6 @@ enum git_transport_flags_t {
 }
 mixin _ExportEnumMembers!git_transport_flags_t;
 
-alias git_transport_message_cb = int function(const(char)* str, int len, void *data);
-
-struct git_transport
-{
-	uint version_ = GIT_TRANSPORT_VERSION;
-	int function(git_transport *transport,
-		git_transport_message_cb progress_cb,
-		git_transport_message_cb error_cb,
-		void *payload) set_callbacks;
-	int function(git_transport *transport,
-		const(char)* url,
-		git_cred_acquire_cb cred_acquire_cb,
-		void *cred_acquire_payload,
-		int direction,
-		int flags) connect;
-	int function(
-		const(git_remote_head)*** out_,
-		size_t *size,
-		git_transport *transport) ls;
-	int function(git_transport *transport, git_push *push) push;
-	int function(git_transport *transport,
-		git_repository *repo,
-		const(git_remote_head**) refs_,
-		size_t count) negotiate_fetch;
-	int function(git_transport *transport,
-		git_repository *repo,
-		git_transfer_progress *stats,
-		git_transfer_progress_callback progress_cb,
-		void *progress_payload) download_pack;
-	int function(git_transport *transport) is_connected;
-	int function(git_transport *transport, int *flags) read_flags;
-	void function(git_transport *transport) cancel;
-	int function(git_transport *transport) close;
-	void function(git_transport *transport) free;
-}
-
-enum GIT_TRANSPORT_VERSION = 1;
-enum git_transport GIT_TRANSPORT_INIT = { GIT_TRANSPORT_VERSION };
-
 int git_transport_new(git_transport **out_, git_remote *owner, const(char)* url);
 
 alias git_transport_cb = int function(git_transport **out_, git_remote *owner, void *param);
@@ -207,3 +168,23 @@ int git_smart_subtransport_git(
 int git_smart_subtransport_ssh(
 	git_smart_subtransport **out_,
 	git_transport* owner);
+
+enum git_cert_ssh_t {
+    GIT_CERT_SSH_MD5 = (1 << 0),
+    GIT_CERT_SSH_SHA1 = (1 << 1),
+}
+mixin _ExportEnumMembers!git_cert_ssh_t;
+
+struct git_cert_hostkey {
+    git_cert parent;
+    git_cert_ssh_t type;
+
+    ubyte[16] hash_md5;
+    ubyte[20] hash_sha1;
+}
+
+struct git_cert_x509 {
+     git_cert parent;
+     void *data;
+     size_t len;
+}

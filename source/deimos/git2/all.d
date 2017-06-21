@@ -2,6 +2,7 @@ module deimos.git2.all;
 
 public
 {
+    import deimos.git2.annotated_commit;
     import deimos.git2.attr;
     import deimos.git2.blame;
     import deimos.git2.blob;
@@ -31,7 +32,9 @@ public
     import deimos.git2.pack;
     import deimos.git2.patch;
     import deimos.git2.pathspec;
+    import deimos.git2.proxy;
     import deimos.git2.push;
+    import deimos.git2.rebase;
     import deimos.git2.refdb;
     import deimos.git2.reflog;
     import deimos.git2.refs;
@@ -62,4 +65,5 @@ public
     import deimos.git2.sys.reflog;
     import deimos.git2.sys.refs;
     import deimos.git2.sys.repository;
+    import deimos.git2.sys.transport;
 }

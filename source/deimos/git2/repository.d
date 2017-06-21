@@ -2,6 +2,7 @@ module deimos.git2.repository;
 
 import std.conv;
 
+import deimos.git2.buffer;
 import deimos.git2.common;
 import deimos.git2.buffer;
 import deimos.git2.oid;
@@ -12,7 +13,8 @@ extern (C):
 
 int git_repository_open(git_repository **out_, const(char)* path);
 int git_repository_wrap_odb(git_repository **out_, git_odb *odb);
-int git_repository_discover(git_buf* buffer,
+int git_repository_discover(
+		git_buf* out_,
 		const(char)* start_path,
 		int across_fs,
 		const(char)* ceiling_dirs);
@@ -21,6 +23,8 @@ enum git_repository_open_flag_t {
 	GIT_REPOSITORY_OPEN_NO_SEARCH = (1 << 0),
 	GIT_REPOSITORY_OPEN_CROSS_FS  = (1 << 1),
 	GIT_REPOSITORY_OPEN_BARE      = (1 << 2),
+	GIT_REPOSITORY_OPEN_NO_DOTGIT = (1 << 3),
+	GIT_REPOSITORY_OPEN_FROM_ENV  = (1 << 4),
 }
 mixin _ExportEnumMembers!git_repository_open_flag_t;
 
@@ -43,6 +47,7 @@ enum git_repository_init_flag_t {
 	GIT_REPOSITORY_INIT_MKDIR             = (1u << 3),
 	GIT_REPOSITORY_INIT_MKPATH            = (1u << 4),
 	GIT_REPOSITORY_INIT_EXTERNAL_TEMPLATE = (1u << 5),
+	GIT_REPOSITORY_INIT_RELATIVE_GITLINK  = (1u << 6),
 }
 mixin _ExportEnumMembers!git_repository_init_flag_t;
 
@@ -67,6 +72,9 @@ struct git_repository_init_options {
 enum GIT_REPOSITORY_INIT_OPTIONS_VERSION = 1;
 enum git_repository_init_options GIT_REPOSITORY_INIT_OPTIONS_INIT = { GIT_REPOSITORY_INIT_OPTIONS_VERSION };
 
+int git_repository_init_init_options(
+	git_repository_init_options* opts,
+	uint version_);
 int git_repository_init_ext(
 	git_repository **out_,
 	const(char)* repo_path,
@@ -81,10 +89,11 @@ int git_repository_set_workdir(
 	git_repository *repo, const(char)* workdir, int update_gitlink);
 int git_repository_is_bare(git_repository *repo);
 int git_repository_config(git_config **out_, git_repository *repo);
+int git_repository_config_snapshot(git_config **out_, git_repository *repo);
 int git_repository_odb(git_odb **out_, git_repository *repo);
 int git_repository_refdb(git_refdb **out_, git_repository *repo);
 int git_repository_index(git_index **out_, git_repository *repo);
-int git_repository_message(char *out_, size_t len, git_repository *repo);
+int git_repository_message(git_buf* out_, git_repository *repo);
 int git_repository_message_remove(git_repository *repo);
 int git_repository_state_cleanup(git_repository *repo);
 
@@ -94,14 +103,16 @@ alias git_repository_fetchhead_foreach_cb = int function(const(char)* ref_name,
 	uint is_merge,
 	void *payload);
 
-int git_repository_fetchhead_foreach(git_repository *repo,
+int git_repository_fetchhead_foreach(
+	git_repository *repo,
 	git_repository_fetchhead_foreach_cb callback,
 	void *payload);
 
 alias git_repository_mergehead_foreach_cb = int function(const(git_oid)* oid,
 	void *payload);
 
-int git_repository_mergehead_foreach(git_repository *repo,
+int git_repository_mergehead_foreach(
+	git_repository *repo,
 	git_repository_mergehead_foreach_cb callback,
 	void *payload);
 int git_repository_hashfile(
@@ -123,7 +134,9 @@ enum git_repository_state_t {
 	GIT_REPOSITORY_STATE_NONE,
 	GIT_REPOSITORY_STATE_MERGE,
 	GIT_REPOSITORY_STATE_REVERT,
-	GIT_REPOSITORY_STATE_CHERRY_PICK,
+	GIT_REPOSITORY_STATE_REVERT_SEQUENCE,
+	GIT_REPOSITORY_STATE_CHERRYPICK,
+	GIT_REPOSITORY_STATE_CHERRYPICK_SEQUENCE,
 	GIT_REPOSITORY_STATE_BISECT,
 	GIT_REPOSITORY_STATE_REBASE,
 	GIT_REPOSITORY_STATE_REBASE_INTERACTIVE,
@@ -137,3 +150,5 @@ int git_repository_state(git_repository *repo);
 int git_repository_set_namespace(git_repository *repo, const(char)* nmspace);
 const(char)*  git_repository_get_namespace(git_repository *repo);
 int git_repository_is_shallow(git_repository *repo);
+int git_repository_ident(const(char) **name, const(char) **email, const(git_repository)* repo);
+int git_repository_set_ident(git_repository* repo, const(char)* name, const(char)* email);

@@ -162,6 +162,11 @@ struct git_signature
 	git_time when;
 }
 
+struct git_cert
+{
+    git_cert_t cert_type;
+}
+
 struct git_reference
 {
     @disable this();
@@ -169,6 +174,18 @@ struct git_reference
 }
 
 struct git_merge_head
+{
+    @disable this();
+    @disable this(this);
+}
+
+struct git_transaction
+{
+    @disable this();
+    @disable this(this);
+}
+
+struct git_annotated_commit
 {
     @disable this();
     @disable this(this);
@@ -186,30 +203,40 @@ struct git_status_list
     @disable this(this);
 }
 
+enum git_cert_t
+{
+    GIT_CERT_NONE,
+    GIT_CERT_X509,
+    GIT_CERT_HOSTKEY_LIBSSH2,
+    GIT_CERT_STRARRAY,
+}
+mixin _ExportEnumMembers!git_cert_t;
+
 enum git_ref_t
 {
-	GIT_REF_INVALID = 0,
-	GIT_REF_OID = 1,
-	GIT_REF_SYMBOLIC = 2,
-	GIT_REF_LISTALL = GIT_REF_OID|GIT_REF_SYMBOLIC,
+    GIT_REF_INVALID = 0,
+    GIT_REF_OID = 1,
+    GIT_REF_SYMBOLIC = 2,
+    GIT_REF_LISTALL = GIT_REF_OID|GIT_REF_SYMBOLIC,
 }
 mixin _ExportEnumMembers!git_ref_t;
 
 enum git_branch_t
 {
-	GIT_BRANCH_LOCAL = 1,
-	GIT_BRANCH_REMOTE = 2,
+    GIT_BRANCH_LOCAL = 1,
+    GIT_BRANCH_REMOTE = 2,
+    GIT_BRANCH_ALL = GIT_BRANCH_LOCAL | GIT_BRANCH_REMOTE,
 }
 mixin _ExportEnumMembers!git_branch_t;
 
 enum git_filemode_t
 {
-	GIT_FILEMODE_NEW					= octal!0,
-	GIT_FILEMODE_TREE					= octal!40000,
-	GIT_FILEMODE_BLOB					= octal!100644,
-	GIT_FILEMODE_BLOB_EXECUTABLE		= octal!100755,
-	GIT_FILEMODE_LINK					= octal!120000,
-	GIT_FILEMODE_COMMIT					= octal!160000,
+    GIT_FILEMODE_UNREADABLE      = octal!0,
+    GIT_FILEMODE_TREE            = octal!40000,
+    GIT_FILEMODE_BLOB            = octal!100644,
+    GIT_FILEMODE_BLOB_EXECUTABLE = octal!100755,
+    GIT_FILEMODE_LINK            = octal!120000,
+    GIT_FILEMODE_COMMIT          = octal!160000,
 }
 mixin _ExportEnumMembers!git_filemode_t;
 
@@ -220,6 +247,12 @@ struct git_refspec
 }
 
 struct git_remote
+{
+    @disable this();
+    @disable this(this);
+}
+
+struct git_transport
 {
     @disable this();
     @disable this(this);
@@ -242,7 +275,9 @@ struct git_transfer_progress
 	size_t received_bytes;
 }
 
-alias git_transfer_progress_callback = int function(const(git_transfer_progress)* stats, void* payload);
+alias git_transfer_progress_cb = int function(const(git_transfer_progress) *stats, void *payload);
+alias git_transport_message_cb = int function(const(char) *str, int len, void *payload);
+alias git_transport_certificate_check_cb = int function(git_cert *cert, int valid, const(char) *host, void *payload);
 
 struct git_submodule
 {
@@ -250,9 +285,14 @@ struct git_submodule
     @disable this(this);
 }
 
-enum git_submodule_update_t {
-    GIT_SUBMODULE_UPDATE_RESET    = -1,
+struct git_writestream
+{
+    int function(git_writestream *stream, const(char) *buffer, size_t len) write;
+    int function(git_writestream *stream) close;
+    void function(git_writestream *stream) free;
+}
 
+enum git_submodule_update_t {
     GIT_SUBMODULE_UPDATE_CHECKOUT = 1,
     GIT_SUBMODULE_UPDATE_REBASE   = 2,
     GIT_SUBMODULE_UPDATE_MERGE    = 3,
@@ -262,12 +302,16 @@ enum git_submodule_update_t {
 }
 
 enum git_submodule_ignore_t {
-    GIT_SUBMODULE_IGNORE_RESET     = -1,
+    GIT_SUBMODULE_IGNORE_UNSPECIFIED = -1,
+    GIT_SUBMODULE_IGNORE_DEFAULT     = 0,
+    GIT_SUBMODULE_IGNORE_NONE        = 1,
+    GIT_SUBMODULE_IGNORE_UNTRACKED   = 2,
+    GIT_SUBMODULE_IGNORE_DIRTY       = 3,
+    GIT_SUBMODULE_IGNORE_ALL         = 4,
+}
 
-    GIT_SUBMODULE_IGNORE_NONE      = 1,
-    GIT_SUBMODULE_IGNORE_UNTRACKED = 2,
-    GIT_SUBMODULE_IGNORE_DIRTY     = 3,
-    GIT_SUBMODULE_IGNORE_ALL       = 4,
-
-    GIT_SUBMODULE_IGNORE_DEFAULT   = 0
+enum git_submodule_recurse_t {
+    GIT_SUBMODULE_RECURSE_NO = 0,
+    GIT_SUBMODULE_RECURSE_YES = 1,
+    GIT_SUBMODULE_RECURSE_ONDEMAND = 2,
 }

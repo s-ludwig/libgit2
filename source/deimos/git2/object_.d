@@ -3,6 +3,7 @@ module deimos.git2.object_;
 import deimos.git2.common;
 import deimos.git2.oid;
 import deimos.git2.types;
+import deimos.git2.buffer;
 
 extern (C):
 
@@ -23,6 +24,7 @@ int git_object_lookup_bypath(
 		const(char)* path,
 		git_otype type);
 const(git_oid)* git_object_id(const(git_object)* obj);
+int git_object_short_id(git_buf *out_, const(git_object)* obj);
 git_otype git_object_type(const(git_object)* obj);
 git_repository * git_object_owner(const(git_object)* obj);
 void git_object_free(git_object *object);
