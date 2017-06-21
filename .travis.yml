@@ -1,7 +1,7 @@
 language: d
 
 install:
-  - LIBGIT2_VER=0.20.0
+  - LIBGIT2_VER=0.25.1
   - curl -fsSL https://github.com/libgit2/libgit2/archive/v${LIBGIT2_VER}.tar.gz | tar -xzf -
   - pushd libgit2-${LIBGIT2_VER}/
   - cmake -DCMAKE_INSTALL_PREFIX=${HOME}/libgit2 .
