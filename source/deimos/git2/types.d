@@ -212,6 +212,12 @@ enum git_cert_t
 }
 mixin _ExportEnumMembers!git_cert_t;
 
+struct git_rebase
+{
+    @disable this();
+    @disable this(this);
+}
+
 enum git_ref_t
 {
     GIT_REF_INVALID = 0,
