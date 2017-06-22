@@ -51,7 +51,6 @@ public
     import deimos.git2.strarray;
     import deimos.git2.submodule;
     import deimos.git2.tag;
-    import deimos.git2.threads;
     import deimos.git2.trace;
     import deimos.git2.transport;
     import deimos.git2.tree;
