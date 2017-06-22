@@ -6,6 +6,7 @@ import deimos.git2.indexer;
 import deimos.git2.remote;
 import deimos.git2.transport;
 import deimos.git2.types;
+import deimos.git2.util;
 
 extern (C):
 

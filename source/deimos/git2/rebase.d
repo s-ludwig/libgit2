@@ -1,9 +1,12 @@
 module deimos.git2.rebase;
 
 import deimos.git2.annotated_commit;
+import deimos.git2.checkout;
 import deimos.git2.common;
+import deimos.git2.merge;
 import deimos.git2.oid;
 import deimos.git2.types;
+import deimos.git2.util;
 
 
 extern (C):
@@ -29,7 +32,7 @@ mixin _ExportEnumMembers!git_rebase_operation_t;
 
 enum GIT_REBASE_OPTIONS_VERSION = 1;
 enum git_rebase_options GIT_REBASE_OPTIONS_INIT = {
-    GIT_REBASE_OPTIONS_VERSION, 0, 0, NULL,
+    GIT_REBASE_OPTIONS_VERSION, 0, 0, null,
     GIT_MERGE_OPTIONS_INIT,
     GIT_CHECKOUT_OPTIONS_INIT
 };

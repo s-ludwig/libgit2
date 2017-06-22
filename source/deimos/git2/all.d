@@ -29,6 +29,7 @@ public
     import deimos.git2.odb;
     import deimos.git2.odb_backend;
     import deimos.git2.oid;
+    import deimos.git2.oidarray;
     import deimos.git2.pack;
     import deimos.git2.patch;
     import deimos.git2.pathspec;
@@ -50,7 +51,6 @@ public
     import deimos.git2.strarray;
     import deimos.git2.submodule;
     import deimos.git2.tag;
-    import deimos.git2.threads;
     import deimos.git2.trace;
     import deimos.git2.transport;
     import deimos.git2.tree;
