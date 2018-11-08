@@ -1,0 +1,8 @@
+name "libgit2"
+description "D bindings for libgit2"
+authors "Andrej Mitrovic" "Sönke Ludwig"
+license "LGPL 2"
+libs "git2" platform="posix"
+sourceFiles "lib/windows-x86-dmd/git2.lib" platform="windows-x86-dmd"
+excludedSourceFiles "source/git2/package.d"
+copyFiles "lib/windows-x86-dmd/git2.dll" platform="windows-x86-dmd"
