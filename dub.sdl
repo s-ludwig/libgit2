@@ -1,0 +1,18 @@
+name "libgit2"
+description "D bindings for libgit2"
+authors "Andrej Mitrovic" "Sönke Ludwig"
+license "LGPL 2"
+sourceFiles "lib/windows-x86-dmd/git2.lib" platform="windows-x86-dmd"
+copyFiles "lib/windows-x86-dmd/git2.dll" platform="windows-x86-dmd"
+excludedSourceFiles "source/git2/package.d"
+targetType "sourceLibrary"
+configuration "system-library" {
+    libs "git2" platform="posix"
+}
+configuration "static-library" {
+    sourceFiles "lib/$PLATFORM-$ARCH/libgit2.a" "lib/$PLATFORM-$ARCH/libssh2.a" "lib/$PLATFORM-$ARCH/libhttp_parser.o" platform="posix"
+    # Explicitly link so that the archive comes after the referencing sources on
+    # the link command line. Still keep sourceFiles so that dub relinks on change.
+    lflags "-l$PACKAGE_DIR/lib/$PLATFORM-$ARCH/libgit2.a" "-l$PACKAGE_DIR/lib/$PLATFORM-$ARCH/libssh2.a"
+    preBuildCommands `$PACKAGE_DIR/build_deps.sh '$PACKAGE_DIR/lib/$PLATFORM-$ARCH/'` platform="posix"
+}
