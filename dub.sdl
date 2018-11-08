@@ -16,3 +16,11 @@ configuration "static-library" {
     lflags "-l$PACKAGE_DIR/lib/$PLATFORM-$ARCH/libgit2.a" "-l$PACKAGE_DIR/lib/$PLATFORM-$ARCH/libssh2.a"
     preBuildCommands `$PACKAGE_DIR/build_deps.sh '$PACKAGE_DIR/lib/$PLATFORM-$ARCH/'` platform="posix"
 }
+configuration "static-library-networking" {
+    sourceFiles "lib/$PLATFORM-$ARCH/libgit2.a" "lib/$PLATFORM-$ARCH/libssh2.a" "lib/$PLATFORM-$ARCH/libhttp_parser.o" platform="posix"
+    # Explicitly link so that the archive comes after the referencing sources on
+    # the link command line. Still keep sourceFiles so that dub relinks on change.
+    lflags "-l$PACKAGE_DIR/lib/$PLATFORM-$ARCH/libgit2.a" "-l$PACKAGE_DIR/lib/$PLATFORM-$ARCH/libssh2.a"
+    libs "openssl" platform="posix"
+    preBuildCommands `$PACKAGE_DIR/build_deps.sh '$PACKAGE_DIR/lib/$PLATFORM-$ARCH/'` platform="posix"
+}
