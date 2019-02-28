@@ -87,7 +87,7 @@ int git_commit_create_buffer(
     const(char)* message,
     const(git_tree)* tree,
     size_t parent_count,
-    const(git_commit)* parents[]
+    const(git_commit)*[] parents
 );
 int git_commit_create_with_signature(
     git_oid *out_,
