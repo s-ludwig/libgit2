@@ -41,8 +41,8 @@ int git_tree_entry_to_object(
 	git_object **object_out,
 	git_repository *repo,
 	const(git_tree_entry)* entry);
-int git_treebuilder_create(
-	git_treebuilder **out_, const(git_tree)* source);
+int git_treebuilder_new(
+    git_treebuilder **out_, git_repository *repo, const(git_tree) *source);
 void git_treebuilder_clear(git_treebuilder *bld);
 uint git_treebuilder_entrycount(git_treebuilder *bld);
 void git_treebuilder_free(git_treebuilder *bld);
